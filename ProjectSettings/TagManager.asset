@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Telekinesis
+  - Teleport
+  - Think
+  - Glass
+  - GAMEMANAGER
+  - Citizen
+  - Hazard
+  - MDWT_D
+  - MDWT_U
+  - MDWT_L
+  - MDWT_R
+  - MDWT_EXIT
+  - REST
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - Player
+  - Npc
+  - Special
+  - SpecialBounds
+  - Enemy
+  - Bounds
+  - Shield
+  - Projectile
+  - Switch
+  - Breakable
+  - InteractBlock
+  - Concrete
+  - AiMargins
+  - PlayerIndoors
+  - Area
+  - MDW
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Pillar
+    uniqueID: 4207386521
+    locked: 0

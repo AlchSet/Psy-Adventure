@@ -1,0 +1,704 @@
+================================================
+JAN 14/1/20 Tuesday
+-----------------------------------------------
+- Scripted the ConceptConnection script for the design scene, it attaches a line between two transfroms.
+- Working on the DeisgnScene.
+- Created the Punch skill and mapped it to the left mouse button, reused the PsychoSlash skill.
+- Made PsychoSlash animation turned flipping optional.
+- Added Vector2 variables to store original local position and offsets for each direction, so I can
+have control over each direction.
+- Added float variable to control the delay after each spell use.
+- Updated PsychoSlash documentation.
+
+================================================
+DEC 7/12/19 Saturday
+-----------------------------------------------
+Weekly Summary:
+I've decided to switch from fighting Demons to Aliens.
+Drew storyboards about the origins of a town infiltrated by aliens and how the Hero ends up there.
+So far thought of the Hero being an agent for a secret organization which arrives in town through the use of teleports.
+
+
+================================================
+DEC 6/12/19 Friday
+-----------------------------------------------
+- Writing entries in Game Genres and Video Game terms.
+- Written down a Step of Events about what the game story contains from entering the town to killing the end boss.
+
+
+Time : 07:13:05
+
+================================================
+DEC 5/12/19 Thursday
+-----------------------------------------------
+- Scanned some design sheets.
+- Designed roughly the first area.
+- Wrote Lore 2 https://trello.com/c/vTctRonQ/161-lore-writing-2
+- Storyboarded Introduction. https://trello.com/c/N9U1umao/162-introduction-storyboard
+
+Time : 08:05:40
+
+
+================================================
+DEC 4/12/19 Wednesday
+-----------------------------------------------
+
+- Made a rough layout of the city.
+- Worked on the Lore. https://trello.com/c/4hluqpgm/159-lore-writing-1
+
+Time : 08:04:07
+
+================================================
+DEC 3/12/19 Tuesday
+-----------------------------------------------
+- Thinking of switching Demons with Aliens, might be easier to design around. I think it suits it better with the Psychic theme.
+- Made a Demon vs Alien list https://trello.com/c/LkQCTPEb/157-demons-vs-aliens
+- Drew story board about an alien creature landing on earth by meteor and hides underground to plot for world domination. https://trello.com/c/AmHH4YRS/158-alien-from-the-meteor-storyboard
+
+
+Time : 08:04:57
+
+================================================
+DEC 2/12/19 Monday
+-----------------------------------------------
+Goals of the week:- Focus on design: Gameplay, Lore.
+
+- Design on the main concept.
+- Designed ways to access areas using powers.
+https://trello.com/c/S8QDnuAN/156-design-using-powers-to-access-new-areas
+
+Time : 08:04:41
+
+
+================================================
+NOV 30/11/19 Saturday
+-----------------------------------------------
+Weekly Summary:
+Finished on the AreaDirectory scripts for navigating from one room to the next. 
+Finished the Fear power and its ability to make the Ai run in terror for X seconds, just needs to be attached to the PsychicMouse script and animations for each direction.
+Also finished on the new Ai improvements: a new FSM with fewer and more versatile states and being able to handle interruptions from status effects. Also introduced energy and Rest state which may look for a place to rejuvenate energy.
+Discovered Unity Record pluggin record video or export frames.
+Installed Mercurial version control with TortoiseHg for art.
+
+
+================================================
+NOV 29/11/19 Friday
+-----------------------------------------------
+- Added Conditions to Sleep and Judge transitions and added a hour parameter which is updated by the gamemanager's time. Thinking whether for WORK_STATE have that functionality theirein instead of relying on the conditions, advantage would be being able to easily define the hour range.
+- Created Home state of WORK_STATE type and have it to go into the house when its 16:00. Home has a locked door, should disable it.
+- Judge state has transition to home which triggers when the hour is after 15:00.
+- Fixed a bug which WORK_STATE events with NextPath() functions were fired twice causing the ai to skip a path and attempt walking to the indoor area. Was occuring when the ai was leaving the coffeeshop to go home, OnFinishPath and OnTeleport, the events which NextPath() was subscribed to were both firing causing it to skip a path.
+Used a bool which gated chaging the pathIndex in NextPath() and have the bool reset after 2 frames.
+- Npc routine done, from sleep he goes to work at 7:00, still goes to work when interrupted, goes home at 16:00 and still goes home when interrupted and goes to sleep at 00:00 and loops again. Has no problem going from Home to Outdoor to Shop. Still using transition conditions instead of in built hour management, not sure if its necessary unless I need to change hours later.
+- Tested with home being the Home.Room1. No problems.
+- WORK_STATE can activate a gameObject when reached goal and deactivate when exited state, used to open/close access to the shop menu.
+- Added Energy and drain values to AiCore, Energy depletes by drain per second, currently decided on 0.0694444444444444‬ per second which is 100/1440 (Number of seconds in a day).
+- Created REST_STATE which recovers energy. Added impulse to CoffeeShopJob2 to go to Rest when energy <25 and go to Judge when >50.
+- Fixed an oversight with BaseStateMachine which didn't call OnStateEnter of the currentState when the game starts, Start executes it.
+- Changed Sleep from IDLE_STATE to SLEEP_STATE. Multiplier set to 6. Npc's starting energy to 50.
+- SLEEP_STATE has the option to search for objects within 7 units with "REST" tag. If such object is found then walk to it and rejuvenate else just rejuvenate where you are.
+- Changed low energy impulse parameter to use a trigger instead of a float, fixed the issue of constantly entering the state searching for a path to the bench every time.
+- Written documentation about WORK_STATE.
+
+**Goals reached! Fear Spell base and Ai Updates!**
+
+Time : 06:13:28
+
+================================================
+NOV 28/11/19 Thursday
+-----------------------------------------------
+- Looking into version control for art. Decided to go with Mercurial with 
+TortoiseHg. 
+https://www.mercurial-scm.org/wiki/
+https://tortoisehg.readthedocs.io/en/latest/quick.html
+- Added sound to Fear.
+- Fear detects bounds with "Citizen" tag.
+- AiCore has RunInFear function which handles logic when feared.
+- When fear is cast the npc will run at double speed in the oposite direction.
+- Fear has a duration, npc goes back to OK when times up.
+- Fear now only works if the victim is within 95 degrees from its facing direction which is currently south.
+- Music Practise: Exploring Plugins and 3osx for chiptunes.
+
+Time : 06:23:06
+
+================================================
+NOV 27/11/19 Wednesday
+-----------------------------------------------
+- Added screenshots to the Project Psychic Adventure list in My Projects
+https://trello.com/b/60Dx56Cc/my-projects
+- Created Impulses in BasedStateMachine: They are a a list of transitions
+which are checked on the FSM.
+- Added Interruption events to AiCore, using Telekinesis and dropping the
+npc triggers an event.
+- Added Interrupt and Judge state. When a stun event is fired the FSM
+will enter Interrupt state and Judge once the stun ends.
+- WORK_STATE behaviour after being interrupted seems to reset to its original
+position before resuming. Fixed that by clearing the path list upon Exit State.
+- WORK_STATE has problems creating a new path if interrupted in the same
+room, doesn't even move if interrupted after reaching its goal. 
+Fixed it, pathIndex wasn't resetting after re-entering the WORK_STATE which
+caused the Index out of Array Bounds error. 
+- Discovered how to use VS Debugger for unity, thats how I fixed the above.
+- Created Fear script, connects the graphics and plays them. Skull alpha 
+changes by animation curve and shakes.
+
+Time : 06:00:03
+
+================================================
+NOV 26/11/19 Tuesday
+-----------------------------------------------
+- Got Unity Recorder working, I can now record lag free. Can also render
+a sequence of images which can be transparent.
+- Updated to Unity 2019.2.13f1, Post Processing Stack v2 breaks Pixel
+Perfect Camera: makes it blurry.
+- Updated Astar Pathfinding to 4.2.10.
+- Worked on the WORK_STATE, can cache paths before hand but has an
+issue going from the next path to the end, I haven't included to
+calculate paths from their new positions after using teleports.
+- Fixed above! Included the teleports destination position in the
+DirectionQuery so WORK_STATE knows from which point to calculate each
+path. On the first iteration it will calculate against the ai's
+current position.
+
+Time : 06:01:36
+
+================================================
+NOV 25/11/19 Monday
+-----------------------------------------------
+Goals of the week:
+- Finish the new Ai improvements
+- Finish the Fear spell
+
+- Working on AreaDirectory, each node should know its children and its parent
+to make it easier to find paths between two nodes. Done! AreaDirectory
+can calculate paths between two node and returns the results.
+- Edited pixel scene: Made purple darker, steps darker, building paint more
+saturated.
+- Music Practise: VT_CB 15 second roll
+
+
+Time : 06:41:45
+
+
+================================================
+NOV 23/11/19 Saturday
+-----------------------------------------------
+Weekly Summary:
+Decided to create the Fear Power, so far worked on its visual effects
+but for it to work I need to update the Ai to support status effects.
+Added StatusEffect states to AiCore, designed a more simplified yet more
+robust CoffeeShopJob FSM and in the middle of designing a Area Directory
+system for pathfinding between rooms.
+
+================================================
+NOV 22/11/19 Friday
+-----------------------------------------------
+- Copying devlog to journal app
+- Working on the AreaDirectory.
+- Turned out to be a complicated subject. Ended up going the Tree like structure route. Data is created in the scene with gameobjects.
+- Created DirectoryNode, DirectoryConnection and DirectionQuery classes.
+
+Time : 06:14:29
+
+================================================
+NOV 21/11/19 Thursday
+-----------------------------------------------
+- Updated documentation.
+
+- Doing work on updating the ai, designing a way for an ai to pathfind to points inside buildings which are accessible only via teleports. Trying to move away from moving on a strict waypoint.
+
+- Created new class called AreaDirectory, contains a list of AreaData objects and holds an AreaData object for itself to serve as the core node. **STILL IN DEVELOPMENT!**
+- AreaData has additional parameters, int ID for comparing, Teleport IN and OUT which are used as ways to enter and exit this area and finally ParentArea AreaData for situations where an Area is accessible through another Area.
+
+Time : 05:51:12
+
+================================================
+NOV 20/11/19 Wednesday
+-----------------------------------------------
+- Working on the Fear power visual effect.
+
+- Looked into improving the debug window: saving node position - forgotten when entering play mode.
+
+- Created WORK_STATE class.
+- Updated BaseStateMachine, State and Condition class to make creating transitions for a State easier and less verbose.
+
+
+
+Time : 05:18:14
+================================================
+NOV 19/11/19 Tuesday
+-----------------------------------------------
+- Designing Ai improvements.
+- Ai has states: OK, STUN,FEAR, FRENZY.
+- Telekinesis sets Npc to STUN and OK when End.
+- Designing art for Fear power.
+
+
+Time : 05:19:28
+
+================================================
+NOV 18/11/19 Monday
+-----------------------------------------------
+Goals of the week: Focus on the Player's powers.
+
+- Designing Fear, Status Effects and an Ai that can support them.
+
+Time : 06:00:52
+
+================================================
+NOV 16/11/19 Saturday
+-----------------------------------------------
+Weekly Summary:
+Repaired Telekinesis, can also be used on Npc's ,added spell
+use for each power, show spell cost when the mouse is hovering
+over a target, imported new graphics for the city and added night
+lighting.
+
+================================================
+NOV 15/11/19 Friday
+-----------------------------------------------
+-New Idea: Visibility & Hearing 
+https://trello.com/c/JJFVoopO/129-visibility-hearing
+
+-Collecting inspirations for city graphics.
+
+-Telekinesis and Enter Mind powers show cost on mouse.
+
+-Made SpellUsesUI text color white from purple.
+
+-Improved lightswitch light in the indoors test,
+uses a spotlight to cover the entire room while the old point
+light is set to a very low intensity value to give some lighting
+in the dark.
+-Updated some documentation.
+
+04:34:59
+
+================================================
+NOV 14/11/19 Thursday
+-----------------------------------------------
+-Edited pixel scene: Removed dither from wall, kept outline,
+removed outline from doorbell panel.
+-Fixed issue with telekinesis object shadow and teleObject kept
+breaking my original placement.
+-Also changed throw to use Lerp instead of MoveTowards.
+-Figured how to make scroll boxes in LibreOffice.
+-Created Spell uses for each power.
+-Created UI for current spell use.
+-Can't use power if uses for it is 0.
+-Psyshield drains 1 use per second while active.
+-Using Telekinesis on interactions costs use.
+-Created lit lamp sprite for building.
+-Note: Psyshield is outside player hierarchy to avoid
+being part of the players collision.
+
+06:07:15
+
+================================================
+NOV 13/11/19 Wednesday
+-----------------------------------------------
+-Added pavement graphic to scene.
+-Added road graphic to scene.
+-Edited pixel scene: Pillow emboss glass door.
+-Playing with Lights. Night Light Styles.
+-Idea: Unique spell ammo Unique Spell bar for each Power
+-Created Telekinesis Object Template.
+-Debugging an odd bug which interacts with last interaction
+while aiming for telekinetic throw.
+-Added building from pixel scene.
+-Fixed telekinesis throw interaction bug.Bug: Interacting with
+last interaction while Telekinesis Toss
+-Telekinesis Object blocks projectiles, interesting, should make
+it breakable in the future.
+-You can use telekinesis on NPC.
+-But doesn't resume path if was telekinized during route and let go.
+-Hover doesn't seem to work right. Putting NPC down returns him to the
+centre of the transform.
+-Edited documentation>Physics2D & Layers: Listed all layers and wrote
+descriptions for each, could weed out a few useless ones.
+
+06:02:34
+
+================================================
+NOV 12/11/19 Tuesday
+-----------------------------------------------
+-Looking into custom light falloff/attenuation, seems to only 
+work for deffered rendering, can't have deferred rendering with
+orthographic camera.
+-Repairing telekinesis power.
+-Set interpolation on player to none to decrease camera background jitter.
+-Figured how to write documentation tooltips.
+-Telekinesis is back, can also interact with interactables from a distance.
+-Deleted Interactable interface.
+-Edited documentation.
+
+06:04:11
+================================================
+NOV 11/11/19 Monday
+-----------------------------------------------
+Goals of the week: Focus on the Player's powers.
+
+-Edited pixel scene: Removed bevel from glass door.
+-Wrote some documentation.
+-Thinking about the players powers.
+-Thinking about status effects.
+-Music Practise: Octavers Orchestra
+
+06:14:39
+
+================================================
+NOV 9/11/19 Saturday
+-----------------------------------------------
+Weekly Summary:
+Created Enter Mind Power for PsychicMouse which opens the MDW which then
+leads to the Mindscape which is a dungeon like space.
+In the mindscape you can access the ThoughtLog UI which shows you thoughts
+and Self which shows you a description of the NPC.
+Created Raycast Controller specifically for the MDW due to physics not
+working when gamespeed=0. 
+
+
+================================================
+NOV 8/11/19 Friday
+-----------------------------------------------
+-Designing the Self window.
+
+-Created a tilemap to represent the mindscape in MDW.
+-Created Mindscape script.
+-MDWPlayer can detect MDW Teleports.
+-Player can now traverse in the mindscape rooms.
+-Created Self Ui. At the moment data is fixed.
+-Player can now exit the mindscape, but cannot go back
+in because the player is still colliding with the exit.
+
+-Goal reached! First Milestone!
+-Music Practise: Acoustic Guitar
+
+06:27:58
+
+================================================
+NOV 7/11/19 Thursday
+-----------------------------------------------
+-Spring cleaning my trello boards.
+-Improved the Enter Mind Icon.
+-MDW appears in the centre of the screen when power is
+selected and an NPC is clicked.
+
+-Created exit graphics for the MDW.
+-Created RaycastController2D script, it can move with unscaled time.
+-Did some improvements to the ThoughtLogUI.
+-Finished the RaycastController script. Still needs a way to detect triggers.
+-Disabled MDWChar collider to don't interfere with the trigger detection.
+-MDWChar can detect trigger colliders without physics.
+-MDW now works when timescale is 0 as its not reliant on physics.
+-MDW player has 3 lives, if it gets hit it will teleport back to its
+original position.
+
+-MDW closes after player loses all 3 lives.
+
+-Noticed a bug during MDW, the actual player can
+still change and cast spells and also change facing direction.
+
+-Music Practise: Acoustic Guitar
+
+06:14:46
+
+================================================
+NOV 6/11/19 Wednesday
+-----------------------------------------------
+-Working on the thought log.
+-Added -tags to the Code Codex.
+-MDWMain holds Npc thoughtlog.
+-Added a button on the thoughtlog graphic. Pressing it 
+opens the thoughtWindow.
+-ThoughtLogUI shows NPC's thoughts.
+-ThoughtLogUI shows "THE MIND IS COMPLETELY EMPTY" when 
+no thoughts have been logged.
+
+-Created icon for Enter Mind.
+-PsychicMouse has mode for Enter Mind power.
+-Timescale turns to 0 when clicking on a NPC.
+-Spin keeps on spinning when timescale is 0.
+-Controller2D cannot move when timescale is 0, rigidbody can't move either.
+-Thinking of making a raycast controller that can work without a rigidbody.
+
+04:03:08
+
+
+================================================
+NOV 5/11/19 Tuesday
+-----------------------------------------------
+-Exported some graphics for the Mindscape.
+-Working on the thought log visual.
+-Music Practise: exploring instruments.
+
+04:23:54
+
+================================================
+NOV 4/11/19 Monday
+-----------------------------------------------
+Goals of the week: Be able to infiltrate someones mind,
+ play the mini game and access information.
+
+-Toutched on the pixel scene. Dithered stairs and some outlines at corners.
+-Developing the mindscape idea.
+
+04:09:11
+================================================
+NOV 2/11/19 Saturday
+-----------------------------------------------
+Weekly Summary:
+Built Mental Defense Window when entering a mind, player must avoid
+obstacles to succeed. Created Thought Log script which stores a list
+of strings for Npc's and ways to add into that list.
+General improvements with correct pixel positions via pixel snap.
+
+================================================
+NOV 1/11/19 Friday
+-----------------------------------------------
+-Working on the MDW. Comparing PixelRounding movement vs Extrapolated RB.
+
+-Created Move() method in **Controller2D**.
+
+-MDW player prints a victory message when colliding with goal.
+-Created hazard.
+-MDW player prints ouch if contacts a hazard.
+-Created a ring of fire with a gap that rotates around the goal. used Spin script.
+
+-Spin script has a spinSpeed value.
+-Added Mask to MDW to keep sprites inside the window.
+
+-Music Practise, Exploring Instruments
+
+04:15:52
+
+================================================
+OCT 31/10/19 Thursday
+-----------------------------------------------
+-Did some modifications to the **Controller2D** class,
+ using PixelCamera to round movement to pixel.
+
+-Discovered Snap Settings, using snap all axes on shadow blog
+ seemed to have fixed the child sprite stuttering, value is
+ 1/Asset Pixels Per Unit (16 in my case)
+https://docs.unity3d.com/Packages/com.unity.2d.pixel-perfect@1.0/manual/index.html#h.uifurbknc4we
+
+
+-Modified **PsychicShield** seems to stutter less.
+
+-Altered velocity in **AiCore**, now moves at controller
+ speed instead of ai speed * controller speed.
+
+-Designing the Mental Defense Window.
+-Created Graphics for Character, Window and Goal.
+-Placed the MDW graphics in the scene.
+-Added new Layer : MDW
+-Character can move in the MDW.
+-Added Bounds to the MDW.
+-MDW layer can only interact with it self.
+
+-Music Practise, Metal Gear theme
+
+04:16:04
+
+================================================
+OCT 30/10/19 Wednesday
+-----------------------------------------------
+-Edited pixel scene, no outer paint lines and darker windows.
+
+-New Physics layer: Area.
+
+-New class: **AreaData**
+-Added **UnityEvent OnEnterArea** and **AreaData currentArea** to AiCore.
+-Created **string GetFormatedTime()** method to  **GameManager** class.
+
+-Coffee Guy logs thoughts when he wakes up, when he enters the cafe
+ and when he goes to sleep.
+
+-Added Project Settings section in the documentation
+ (Physics2dMatrix, Layers, Tags, Input).
+
+-Music Practise, Fly me to the moon.
+
+04:20:28
+
+
+================================================
+OCT 29/10/19 Tuesday
+-----------------------------------------------
+-Developing the thought log idea.
+-Created ThoughtLog class.
+-Created AWAKE_STATE : State.
+-Created SLEEP_STATE : State.
+-Deleted AWAKE_STATE : State, not necessary as i can use a 
+parameter wether to set isSleeping true or false.
+-Renamed SLEEP_STATE to SETSLEEP_STATE.
+-AiCore has isSleep bool to indicate if sleeping or not.
+-AiCore has OnSleeping and OnWakingUp events.
+-Added [Awaken] and [FallAsleep] states to CoffeeShopJob.
+-CoffeeGuy prints message when he wakes up or sleeps.
+-CoffeeGuy adds wakeup and sleep thoughts to thoughtlog list with timestamp.
+-Music Practise: plain piano
+
+04:22:22
+
+
+
+================================================
+OCT 28/10/19 Monday
+-----------------------------------------------
+-Updated the pixel scene, Line pattern style, dithered road,
+ locust coloured pavement.
+-Lesser Demon shows a pentacle when shooting fireball, slowly fades away.
+-Developing the thought log idea.
+-Music Practise.
+
+04:14:02
+
+================================================
+OCT 26/10/19 Saturday
+-----------------------------------------------
+Weekly Summary:
+Made Possessed Citizen encounter, demon soul targets 
+and possess a citizen and transforms when sees a player.
+
+
+================================================
+OCT 25/10/19 Friday
+-----------------------------------------------
+-Updated the pixel scene with Dither Brush.
+-Developing the Thought Log Idea. Should be able to read Plan of the Day.
+-Npc stats idea https://trello.com/c/oYE4pJ5r/107-npc-stats
+-Found a picture for moods.
+
+
+================================================
+OCT 24/10/19 Thursday
+-----------------------------------------------
+-Made improvments to the pixel scene.
+-Design Entering Minds.
+-Thought Log idea https://trello.com/c/tMfuHLJe/105-thought-log
+-Chiptune research,
+ found NES sounds http://www.mattmontag.com/projects-page/nintendo-vst
+
+
+================================================
+OCT 23/10/19 Wednesday
+-----------------------------------------------
+-Working on pixel scene.
+-Learned about making patterns in Krita.
+-https://trello.com/c/uS1IGLts/104-artstyle-1
+-Looking into 8 bit music composing.
+
+================================================
+OCT 22/10/19 Tueday
+-----------------------------------------------
+-Demon reverts back to human form when Life reaches 0.
+-Soul drops and player can absorb it.
+-AiCore QuitPath() removes methods from OnFinishPath delegate.
+-New script: FLEE_STATE : State
+-Demon will atempt to flee when HP is less than 2.
+-Demon can die from flee state and lose form.
+-Completed https://trello.com/c/IXWdGocp/92-demon-battle-in-the-alley
+-Duplicated Main Camera and changed resolution to 480x270
+-Thking of sticking to the lower resolution than bumping it up, higher res=twice as much work to make it look good.
+-Painting a pixel scene.
+
+
+================================================
+OCT 21/10/19 Monday
+-----------------------------------------------
+-Working on the Possessed Citizen.
+-Drew a prototype lesser demon.
+-New SpriteRenderer value in AiCore
+-New Script: TRANSFORM_STATE : State
+-Looked into how to draw lines in custom State Machine window,
+ would probably have to import a picture of an arrow.
+-Possessed Citizen Transforms into a demon.
+-Demon can return back to human form when lost sight of player.
+-Demon can receive damage.
+-Demon's Damageable updates life parameter in PossessedCitizen job,
+ will enter Dead Demon once Life reaches 0.
+
+
+================================================
+OCT 19/10/19 Saturday
+-----------------------------------------------
+Weekly Summary:
+Working on DemonSoul script for Possessed Citizen scenario, 
+did some improvments to related code to support it.
+Also created a scene template use each time i want a new scene.
+
+================================================
+OCT 18/10/19 Friday
+-----------------------------------------------
+-Continue work on DemonSoul script.
+-Wrote constructors for Parameter and Condition scripts.
+-New script: PossessedCitizenA : BaseStateMachine.
+-Updated Sensor script.
+-New script: SensorActions.
+-Possessed Citizen can now see the player.
+-New script: Spell.
+-DemonSoul grants Fireball to the Citizen when possessing it.
+-New script: ATTACK_STATE : State
+-Possessed Citizen now shoots Fireballs at player.
+Stops when lost sight of the target.
+
+================================================
+OCT 17/10/19 Thursday
+-----------------------------------------------
+-Working on DemonSoul and Possessing human.
+-Made a new doc for code tricks
+-Added QuitPath function and list of jobs to AiCore to stop
+movement when being possessed.
+-Found a way to have coloured Debug.Logs.
+-Currently the demon looks for a victim, head towards him and possess him, stopping all the victims jobs and current path and becomes the victims child.
+
+
+================================================
+OCT 16/10/19 Wednesday
+-----------------------------------------------
+-Updated Tasks
+-Created BASED_SCENE for Template, contains the bare minimum (Player, Lighting, Managers).
+-Designed a character Char Design Test
+-Searching for References for Hero Design Character Designs Hero
+-Uploaded visual of the new resolution NEW RESOLUTION TEST
+-Alley for Demon Encounter
+
+================================================
+OCT 15/10/19 Tuesday
+-----------------------------------------------
+-Idea Book: List of Genres
+-Deciding on Length before demon king summoning,
+-A day = 24 mins.
+-31 days would be around 12 hours not excluding sleep.
+-10 days would be near 4 hours.
+-Should go with 10 days before the summoning.
+-Looking into blogs.
+-Idea: News
+-Rough City Layout.
+-Made a tumblr.
+
+================================================
+OCT 14/10/19 Monday
+-----------------------------------------------
+-Enclosed Area design.
+-Design Demon Encounter at alley.
+-Design Enter Mind power.
+
+====================================================
+OCT 7/10/19 - 11/11/19
+---------------------------------------------------
+-Goal: Capture all 8 Demons
+-Goal: Defeat demon king
+
+Art: Experiment char size from 1x2 to 2x4
+Camera Experiment: 426x240 to 520x432
+
+Neighbourhood A design
+
+City Building Pieces for design
+
+Thinking of core gameplay: Player exorcising possesed people.
+
+====================================================================
